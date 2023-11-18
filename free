@@ -1,0 +1,83 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class Product {
+    private String id;
+    private String name;
+    private double price;
+    private int quantity;
+
+    public Product(String id, String name, double price, int quantity) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+}
+
+class Inventory {
+    private Map<String, Product> products;
+
+    public Inventory() {
+        products = new HashMap<>();
+    }
+
+    public void addProduct(Product product) {
+        products.put(product.getId(), product);
+    }
+
+    public void sellProduct(String productId, int quantity) {
+        Product product = products.get(productId);
+        if (product != null) {
+            if (product.getQuantity() >= quantity) {
+                product.setQuantity(product.getQuantity() - quantity);
+                System.out.println(quantity + " units of " + product.getName() + " sold.");
+            } else {
+                System.out.println("Insufficient stock for " + product.getName());
+            }
+        } else {
+            System.out.println("Product not found in inventory.");
+        }
+    }
+
+    public void listProducts() {
+        System.out.println("Current Inventory:");
+        for (Product product : products.values()) {
+            System.out.println("ID: " + product.getId() + ", Name: " + product.getName() +
+                    ", Price: " + product.getPrice() + ", Quantity: " + product.getQuantity());
+        }
+    }
+}
+
+public class InventoryManagementSystem {
+    public static void main(String[] args) {
+        Inventory inventory = new Inventory();
+
+        Product product1 = new Product("101", "Laptop", 999.99, 10);
+        Product product2 = new Product("102", "Smartphone", 499.99, 20);
+
+        inventory.addProduct(product1);
+        inventory.addProduct(product2);
+
+        inventory.listProducts();
+
+        inventory.sellProduct("101", 3);  // Selling 3 units of Laptop
+        inventory.sellProduct("102", 25); // Trying to sell 25 units of Smartphone
+    }
+}
